@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strict Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan:#00e5ff; --blue:#2979ff; --purple:#7c3aed; --pink:#ff2d9b;
+    --dark:#050c1a; --card-bg:rgba(10,22,40,0.85); --border:rgba(0,229,255,0.15);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--dark);color:#e0eaff;font-family:'Rajdhani',sans-serif;overflow-x:hidden;}
+  body::before{
+    content:'';position:fixed;inset:0;
+    background-image:linear-gradient(rgba(41,121,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(41,121,255,.04) 1px,transparent 1px);
+    background-size:60px 60px;pointer-events:none;z-index:0;
+  }
+
+  /* PAGE SYSTEM */
+  .page{display:none;} .page.active{display:block;}
+
+  /* NAV */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 2.5rem;height:70px;
+    background:rgba(5,12,26,0.94);backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
+  .nav-logo img{height:40px;width:40px;object-fit:contain;}
+  .nav-logo span{
+    font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:900;
+    background:linear-gradient(90deg,var(--cyan),var(--blue),var(--purple));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;
+  }
+  .nav-links{display:flex;gap:0;list-style:none;align-items:center;}
+  .nav-links li a,.nav-links li button{
+    font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.9rem;
+    color:#8899bb;text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;
+    transition:color .2s;position:relative;background:none;border:none;cursor:pointer;
+    padding:0 1.1rem;line-height:70px;display:block;
+  }
+  .nav-links li a::after,.nav-links li button::after{
+    content:'';position:absolute;bottom:0;left:1.1rem;right:1.1rem;
+    height:2px;background:linear-gradient(90deg,var(--cyan),var(--purple));
+    transform:scaleX(0);transition:transform .3s;
+  }
+  .nav-links li a:hover,.nav-links li button:hover{color:var(--cyan);}
+  .nav-links li a:hover::after,.nav-links li button:hover::after,
+  .nav-links li a.active-nav::after,.nav-links li button.active-nav::after{transform:scaleX(1);}
+  .nav-links li a.active-nav,.nav-links li button.active-nav{color:var(--cyan);}
+  .discord-btn{
+    display:flex;align-items:center;gap:8px;padding:8px 18px;
+    background:linear-gradient(135deg,#5865F2,#7289da);border-radius:6px;color:#fff !important;
+    font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.85rem;text-decoration:none;
+    letter-spacing:1px;transition:transform .2s,box-shadow .2s;
+    box-shadow:0 0 20px rgba(88,101,242,.3);line-height:normal !important;margin-left:1rem;
+  }
+  .discord-btn::after{display:none !important;}
+  .discord-btn:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(88,101,242,.5);}
+  .discord-icon{width:16px;height:16px;fill:white;}
+
+  /* SHARED */
+  .page-wrap{position:relative;z-index:1;padding-top:70px;}
+  .section{max-width:1280px;margin:0 auto;padding:5rem 2rem;}
+  .section-header{text-align:center;margin-bottom:3.5rem;}
+  .section-label{font-size:.75rem;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);margin-bottom:.8rem;opacity:.8;display:block;}
+  .section-header h2{
+    font-family:'Orbitron',monospace;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;
+    background:linear-gradient(90deg,#fff 0%,#a0b4e0 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;
+  }
+  .section-line{width:80px;height:3px;background:linear-gradient(90deg,var(--cyan),var(--purple));margin:1.2rem auto 0;border-radius:2px;}
+
+  /* HERO */
+  #hero-section{
+    position:relative;min-height:100vh;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;
+    padding:100px 2rem 4rem;z-index:1;overflow:hidden;
+  }
+  .hero-glow{
+    position:absolute;width:700px;height:700px;border-radius:50%;
+    background:radial-gradient(circle,rgba(41,121,255,.18) 0%,rgba(124,58,237,.12) 40%,transparent 70%);
+    top:50%;left:50%;transform:translate(-50%,-50%);
+    pointer-events:none;animation:pulseGlow 4s ease-in-out infinite;
+  }
+  @keyframes pulseGlow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:1}50%{transform:translate(-50%,-50%) scale(1.08);opacity:.7}}
+  .hero-logo{
+    width:130px;height:130px;object-fit:contain;margin-bottom:1.8rem;
+    filter:drop-shadow(0 0 30px rgba(0,229,255,.4)) drop-shadow(0 0 60px rgba(124,58,237,.3));
+    animation:floatLogo 3s ease-in-out infinite;
+  }
+  @keyframes floatLogo{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .hero h1{
+    font-family:'Orbitron',monospace;font-size:clamp(2rem,5.5vw,4.5rem);font-weight:900;line-height:1.1;
+    background:linear-gradient(135deg,var(--cyan) 0%,var(--blue) 40%,var(--purple) 70%,var(--pink) 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;margin-bottom:1rem;
+  }
+  .hero-tagline{font-size:1.2rem;color:#8899cc;letter-spacing:3px;text-transform:uppercase;font-weight:300;margin-bottom:2.5rem;}
+  .hero-cta-row{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;}
+  .btn-primary{
+    padding:13px 32px;background:linear-gradient(135deg,var(--blue),var(--purple));border:none;border-radius:6px;
+    color:#fff;font-family:'Orbitron',monospace;font-size:.8rem;font-weight:700;letter-spacing:2px;
+    text-decoration:none;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 0 30px rgba(41,121,255,.3);
+  }
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 0 50px rgba(41,121,255,.5);}
+  .btn-outline{
+    padding:12px 32px;background:transparent;border:1.5px solid var(--cyan);border-radius:6px;
+    color:var(--cyan);font-family:'Orbitron',monospace;font-size:.8rem;font-weight:700;
+    letter-spacing:2px;text-decoration:none;cursor:pointer;transition:all .2s;
+  }
+  .btn-outline:hover{background:rgba(0,229,255,.1);box-shadow:0 0 30px rgba(0,229,255,.2);}
+
+  /* GAME CARDS */
+  .games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.8rem;}
+  .game-card{
+    background:var(--card-bg);border:1px solid var(--border);border-radius:12px;
+    overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s;position:relative;
+  }
+  .game-card::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg,rgba(0,229,255,.04),rgba(124,58,237,.04));pointer-events:none;
+  }
+  .game-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 40px rgba(41,121,255,.15);border-color:rgba(0,229,255,.35);}
+  .game-thumb{width:100%;height:160px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:linear-gradient(135deg,#0d1f3c 0%,#1a0a3c 50%,#0d1f3c 100%);}
+  .game-info{padding:1.2rem 1.4rem 1.4rem;}
+  .game-info h3{font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;color:#ddeeff;letter-spacing:1px;margin-bottom:.5rem;}
+  .game-desc{font-size:.92rem;color:#6677aa;line-height:1.6;margin-bottom:1rem;}
+  .game-stats{display:flex;gap:1.5rem;margin-bottom:1.2rem;}
+  .stat-item{display:flex;flex-direction:column;gap:2px;}
+  .stat-label{font-size:.68rem;color:#44557a;letter-spacing:1.5px;text-transform:uppercase;}
+  .stat-value{font-family:'Orbitron',monospace;font-size:.9rem;font-weight:700;color:var(--cyan);}
+  .stat-value.loading{color:#44557a;font-size:.75rem;animation:pulse 1.5s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+  .game-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:.9rem;}
+  .badge-active{background:rgba(0,229,255,.12);color:var(--cyan);border:1px solid rgba(0,229,255,.25);}
+  .badge-beta{background:rgba(255,170,0,.12);color:#ffaa00;border:1px solid rgba(255,170,0,.25);}
+  .badge-coming{background:rgba(124,58,237,.15);color:#a78bfa;border:1px solid rgba(124,58,237,.3);}
+  .play-btn{
+    display:block;width:100%;padding:10px;text-align:center;
+    background:linear-gradient(135deg,var(--blue),var(--purple));border:none;border-radius:6px;
+    color:#fff;font-family:'Orbitron',monospace;font-size:.75rem;font-weight:700;letter-spacing:2px;
+    text-decoration:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(41,121,255,.25);
+  }
+  .play-btn:hover{box-shadow:0 6px 30px rgba(41,121,255,.5);transform:translateY(-1px);}
+  .play-btn.soon{background:linear-gradient(135deg,#1e2d50,#2a1a4a);color:#44557a;cursor:not-allowed;pointer-events:none;}
+
+  /* STAFF CARDS */
+  .staff-tier{margin-bottom:3rem;}
+  .tier-label{
+    font-family:'Orbitron',monospace;font-size:.72rem;font-weight:700;letter-spacing:3px;
+    text-transform:uppercase;margin-bottom:1.2rem;padding-left:1rem;border-left:3px solid;
+    display:flex;align-items:center;gap:10px;
+  }
+  .tier-ceo{border-color:#ffd700;color:#ffd700;}
+  .tier-lead{border-color:var(--cyan);color:var(--cyan);}
+  .tier-dev{border-color:var(--blue);color:#7ab3ff;}
+  .tier-manager{border-color:var(--purple);color:#a78bfa;}
+  .tier-tester{border-color:#44557a;color:#8899bb;}
+  .staff-grid{display:flex;flex-wrap:wrap;gap:1rem;}
+  .staff-card{
+    background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
+    padding:1rem 1.4rem;display:flex;align-items:center;gap:1rem;
+    min-width:200px;flex:1;max-width:280px;transition:border-color .2s,transform .2s;
+  }
+  .staff-card:hover{transform:translateY(-3px);}
+  .staff-card.ceo{border-color:rgba(255,215,0,.25);}
+  .staff-card.lead{border-color:rgba(0,229,255,.2);}
+  .staff-card.dev{border-color:rgba(41,121,255,.2);}
+  .staff-card.manager{border-color:rgba(124,58,237,.2);}
+  .staff-card.tester{border-color:rgba(68,85,122,.2);}
+  .staff-avatar{
+    width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-family:'Orbitron',monospace;font-weight:900;font-size:.9rem;color:#fff;flex-shrink:0;
+  }
+  .av-ceo{background:linear-gradient(135deg,#b8860b,#ffd700);}
+  .av-lead{background:linear-gradient(135deg,#006080,var(--cyan));}
+  .av-dev{background:linear-gradient(135deg,var(--blue),#1a3a8a);}
+  .av-manager{background:linear-gradient(135deg,var(--purple),#3d1a7a);}
+  .av-tester{background:linear-gradient(135deg,#1e2d50,#334466);}
+  .staff-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;color:#ccdaff;letter-spacing:.5px;}
+  .staff-role{font-size:.7rem;color:#44557a;letter-spacing:1px;text-transform:uppercase;}
+
+  /* DISCORD BANNER */
+  .discord-cta{
+    background:linear-gradient(135deg,rgba(88,101,242,.15),rgba(124,58,237,.1));
+    border:1px solid rgba(88,101,242,.3);border-radius:16px;padding:3rem;
+    display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;
+    position:relative;overflow:hidden;
+  }
+  .discord-cta::before{
+    content:'';position:absolute;right:-60px;top:-60px;width:240px;height:240px;
+    background:radial-gradient(circle,rgba(88,101,242,.2),transparent 70%);border-radius:50%;
+  }
+  .discord-text h3{font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:.5rem;letter-spacing:1px;}
+  .discord-text p{color:#6677aa;font-size:1rem;}
+  .discord-big-btn{
+    display:flex;align-items:center;gap:12px;padding:14px 32px;
+    background:linear-gradient(135deg,#5865F2,#7289da);border-radius:8px;color:#fff;
+    font-family:'Orbitron',monospace;font-size:.85rem;font-weight:700;letter-spacing:2px;
+    text-decoration:none;transition:transform .2s,box-shadow .2s;
+    box-shadow:0 0 40px rgba(88,101,242,.35);white-space:nowrap;
+  }
+  .discord-big-btn svg{width:22px;height:22px;fill:white;}
+  .discord-big-btn:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(88,101,242,.55);}
+
+  /* ACQUISITIONS */
+  .acq-hero-wrap{
+    text-align:center;padding:5rem 2rem 3rem;
+    background:linear-gradient(180deg,rgba(41,121,255,.06) 0%,transparent 100%);
+    border-bottom:1px solid var(--border);position:relative;overflow:hidden;
+  }
+  .acq-hero-wrap::before{
+    content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);
+    width:600px;height:300px;background:radial-gradient(ellipse,rgba(124,58,237,.15),transparent 70%);pointer-events:none;
+  }
+  .acq-hero-wrap p{max-width:680px;margin:1rem auto 0;font-size:1.1rem;color:#6677aa;line-height:1.8;}
+  .acq-title{
+    font-family:'Orbitron',monospace;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;
+    background:linear-gradient(135deg,var(--cyan),var(--blue),var(--purple));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;margin-bottom:1rem;
+  }
+  .plans-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:1100px;margin:0 auto;}
+  @media(max-width:750px){.plans-grid{grid-template-columns:1fr;}}
+  .plan-card{
+    background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:2.5rem;
+    position:relative;overflow:hidden;transition:transform .3s,border-color .3s,box-shadow .3s;
+  }
+  .plan-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 40px rgba(41,121,255,.1);}
+  .plan-card.featured{border-color:rgba(0,229,255,.35);}
+  .plan-card.featured::before{
+    content:'MOST POPULAR';position:absolute;top:1.2rem;right:-2.5rem;
+    background:linear-gradient(135deg,var(--cyan),var(--blue));color:#000;
+    font-family:'Orbitron',monospace;font-size:.55rem;font-weight:900;letter-spacing:2px;
+    padding:5px 3.5rem;transform:rotate(35deg);
+  }
+  .plan-icon{width:60px;height:60px;border-radius:12px;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:center;font-size:1.8rem;}
+  .plan-icon.full{background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(41,121,255,.2));}
+  .plan-icon.partner{background:linear-gradient(135deg,rgba(0,229,255,.2),rgba(124,58,237,.2));}
+  .plan-card h3{font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:900;color:#fff;letter-spacing:1px;margin-bottom:.4rem;}
+  .plan-subtitle{font-size:.82rem;color:#44557a;letter-spacing:1px;margin-bottom:1.4rem;}
+  .plan-desc{font-size:.97rem;color:#8899bb;line-height:1.8;margin-bottom:1.8rem;}
+  .plan-perks{list-style:none;margin-bottom:2rem;display:flex;flex-direction:column;gap:.7rem;}
+  .plan-perks li{display:flex;align-items:flex-start;gap:10px;font-size:.93rem;color:#c0d0ee;}
+  .plan-perks li::before{content:'✓';color:var(--cyan);font-weight:700;font-family:'Orbitron',monospace;font-size:.8rem;margin-top:2px;flex-shrink:0;}
+  .plan-perks li.con::before{content:'✗';color:#ff4466;}
+  .plan-cta{
+    display:block;width:100%;padding:13px;text-align:center;border-radius:8px;
+    font-family:'Orbitron',monospace;font-size:.75rem;font-weight:700;letter-spacing:2px;
+    text-decoration:none;cursor:pointer;transition:all .2s;
+  }
+  .full-cta{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border:none;box-shadow:0 0 30px rgba(41,121,255,.25);}
+  .full-cta:hover{box-shadow:0 0 50px rgba(41,121,255,.5);transform:translateY(-2px);}
+  .partner-cta{background:transparent;border:1.5px solid var(--cyan);color:var(--cyan);}
+  .partner-cta:hover{background:rgba(0,229,255,.1);box-shadow:0 0 30px rgba(0,229,255,.2);}
+  .check{color:var(--cyan);} .cross{color:#ff4466;}
+  .cmp-table-wrap{max-width:900px;margin:0 auto;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .cmp-table-title{padding:1rem 1.5rem;border-bottom:1px solid var(--border);font-family:'Orbitron',monospace;font-size:.78rem;font-weight:700;letter-spacing:2px;color:var(--cyan);}
+  table{width:100%;border-collapse:collapse;}
+  thead th{padding:.9rem 1.5rem;text-align:left;font-family:'Orbitron',monospace;font-size:.63rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#44557a;border-bottom:1px solid var(--border);background:rgba(5,12,26,.5);}
+  tbody tr{border-bottom:1px solid rgba(0,229,255,.06);transition:background .15s;}
+  tbody tr:last-child{border-bottom:none;}
+  tbody tr:hover{background:rgba(41,121,255,.05);}
+  tbody td{padding:.95rem 1.5rem;font-size:.93rem;color:#c0d0ee;vertical-align:middle;}
+  tbody td:first-child{color:#ddeeff;font-weight:600;}
+  .steps{display:flex;flex-direction:column;gap:0;max-width:860px;margin:0 auto;}
+  .step{display:flex;gap:1.5rem;align-items:flex-start;padding:1.5rem 0;border-bottom:1px solid rgba(0,229,255,.06);}
+  .step:last-child{border-bottom:none;}
+  .step-num{width:40px;height:40px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:900;font-size:.85rem;color:#fff;}
+  .step h4{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.05rem;color:#ddeeff;margin-bottom:.3rem;}
+  .step p{font-size:.9rem;color:#6677aa;line-height:1.6;}
+
+  /* FOOTER */
+  footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);color:#2a3a5a;font-size:.82rem;letter-spacing:1px;}
+  footer span{background:linear-gradient(90deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;}
+
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(25px);transition:opacity .65s ease,transform .65s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+  ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--dark);}
+  ::-webkit-scrollbar-thumb{background:linear-gradient(var(--blue),var(--purple));border-radius:3px;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#" onclick="showPage('home');return false;">
+    <img src="ss.png" alt="Strict Studio">
+    <span>STRICT STUDIO</span>
+  </a>
+  <ul class="nav-links">
+    <li><button onclick="showPage('home')" id="nav-home" class="active-nav">Home</button></li>
+    <li><button onclick="showPage('home');scrollAfter('games');" id="nav-games">Games</button></li>
+    <li><button onclick="showPage('home');scrollAfter('staff');" id="nav-staff">Team</button></li>
+    <li><button onclick="showPage('acquisitions')" id="nav-acq">Acquisitions</button></li>
+    <li>
+      <a href="https://discord.gg/BkGQ8ATpkb" target="_blank" class="discord-btn">
+        <svg class="discord-icon" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057.1 18.08.11 18.1.128 18.116a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.030z"/></svg>
+        Discord
+      </a>
+    </li>
+  </ul>
+</nav>
+
+
+<!-- ════════════════════════════════════════════
+                    HOME PAGE
+════════════════════════════════════════════ -->
+<div id="page-home" class="page active page-wrap">
+
+  <div id="hero-section">
+    <div class="hero-glow"></div>
+    <img src="ss.png" alt="Strict Studio" class="hero-logo">
+    <div class="hero">
+      <h1>STRICT STUDIO</h1>
+      <p class="hero-tagline">Building the Future of Roblox Gaming</p>
+      <div class="hero-cta-row">
+        <button class="btn-primary" onclick="scrollAfter('games')">EXPLORE GAMES</button>
+        <button class="btn-outline" onclick="showPage('acquisitions')">ACQUISITIONS</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="games" class="section reveal">
+    <div class="section-header">
+      <span class="section-label">// Our Portfolio</span>
+      <h2>OUR GAMES</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="games-grid" id="games-grid"></div>
+  </div>
+
+  <div class="section reveal" style="padding-top:0">
+    <div class="discord-cta">
+      <div class="discord-text">
+        <h3>JOIN OUR COMMUNITY</h3>
+        <p>Early access, updates, giveaways, and the whole team.</p>
+      </div>
+      <a href="https://discord.gg/BkGQ8ATpkb" target="_blank" class="discord-big-btn">
+        <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057.1 18.08.11 18.1.128 18.116a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.030z"/></svg>
+        JOIN SERVER
+      </a>
+    </div>
+  </div>
+
+  <div id="staff" class="section reveal">
+    <div class="section-header">
+      <span class="section-label">// The Crew</span>
+      <h2>OUR TEAM</h2>
+      <div class="section-line"></div>
+    </div>
+    <div id="staff-container"></div>
+  </div>
+
+  <footer><p>© 2025 <span>Strict Studio</span> · All Rights Reserved · Built on Roblox</p></footer>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+               ACQUISITIONS PAGE
+════════════════════════════════════════════ -->
+<div id="page-acquisitions" class="page page-wrap">
+
+  <div class="acq-hero-wrap reveal">
+    <span class="section-label">// Strict Studio · Business Development</span>
+    <h2 class="acq-title">GAME ACQUISITIONS</h2>
+    <div class="section-line" style="margin:0 auto 1.5rem"></div>
+    <p>We acquire quality Roblox games and invest in their future. Whether you want a clean exit or want to stay on as lead developer — we have a deal structure built for you.</p>
+  </div>
+
+  <div class="section reveal" style="padding-top:3rem">
+    <div class="section-header">
+      <span class="section-label">// Choose Your Path</span>
+      <h2>ACQUISITION PLANS</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-icon full">🏆</div>
+        <h3>FULL ACQUISITION</h3>
+        <p class="plan-subtitle">Option 1 · Complete Ownership Transfer</p>
+        <p class="plan-desc">You sell your game and Strict Studio takes full ownership. Development, staff, monetization — everything transfers to us. You walk away with a clean payout and zero obligations.</p>
+        <ul class="plan-perks">
+          <li>One-time lump sum negotiated upfront</li>
+          <li>Studio handles all future development &amp; updates</li>
+          <li>Studio manages all staff and operating costs</li>
+          <li>Clean exit — no ongoing obligations</li>
+          <li class="con">No role in the game after handoff</li>
+          <li class="con">No share of future revenue</li>
+        </ul>
+        <a href="https://discord.gg/BkGQ8ATpkb" target="_blank" class="plan-cta full-cta">APPLY ON DISCORD</a>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-icon partner">🤝</div>
+        <h3>PARTNERSHIP MODEL</h3>
+        <p class="plan-subtitle">Option 2 · Co-Ownership + 50% Revenue Share</p>
+        <p class="plan-desc">Strict Studio acquires and fully funds the game. You stay on as Lead Developer, build your own team under our banner, and keep 50% of all revenue to share with your team however you decide.</p>
+        <ul class="plan-perks">
+          <li>Studio funds all development costs</li>
+          <li>You remain Lead Developer with creative control</li>
+          <li>Hire &amp; manage your own team under our brand</li>
+          <li>50% revenue share — distribute freely to your team</li>
+          <li>Studio handles publishing, marketing &amp; operations</li>
+          <li class="con">Strict Studio holds ownership &amp; final decisions</li>
+        </ul>
+        <a href="https://discord.gg/BkGQ8ATpkb" target="_blank" class="plan-cta partner-cta">APPLY ON DISCORD</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section reveal" style="padding-top:0">
+    <div class="section-header" style="margin-bottom:2rem">
+      <span class="section-label">// Side by Side</span>
+      <h2>PLAN COMPARISON</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="cmp-table-wrap">
+      <div class="cmp-table-title">📊 FULL ACQUISITION vs PARTNERSHIP</div>
+      <table>
+        <thead><tr><th>Feature</th><th>Full Acquisition</th><th>Partnership Model</th></tr></thead>
+        <tbody>
+          <tr><td>Game Ownership</td><td>Strict Studio (100%)</td><td>Strict Studio (100%)</td></tr>
+          <tr><td>Upfront Payment</td><td><span class="check">✓</span> Lump sum</td><td><span class="cross">✗</span> No lump sum</td></tr>
+          <tr><td>Revenue Share</td><td><span class="cross">✗</span> None</td><td><span class="check">✓</span> 50% to Lead Dev</td></tr>
+          <tr><td>Your Ongoing Role</td><td><span class="cross">✗</span> None after handoff</td><td><span class="check">✓</span> Lead Developer</td></tr>
+          <tr><td>Studio Ongoing Funding</td><td><span class="cross">✗</span> No</td><td><span class="check">✓</span> Full dev fund</td></tr>
+          <tr><td>Hire Your Own Team</td><td><span class="cross">✗</span> No</td><td><span class="check">✓</span> Yes, under our banner</td></tr>
+          <tr><td>Creative Control</td><td><span class="cross">✗</span> None</td><td><span class="check">✓</span> Full (within guidelines)</td></tr>
+          <tr><td>Marketing &amp; Publishing</td><td><span class="check">✓</span> Studio-managed</td><td><span class="check">✓</span> Studio-managed</td></tr>
+          <tr><td>Best For</td><td style="color:#8899bb">Sellers wanting a clean exit</td><td style="color:#8899bb">Devs who want to keep growing</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section reveal" style="padding-top:0">
+    <div class="section-header" style="margin-bottom:2rem">
+      <span class="section-label">// What Happens Next</span>
+      <h2>THE PROCESS</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div><h4>Reach Out on Discord</h4><p>Open a ticket or DM us. Share your game name, genre, and rough stats.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div><h4>Game Review</h4><p>Our team evaluates your game — visits, CCU, retention, and monetization. Response within 48–72 hours.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div><h4>Offer &amp; Plan Selection</h4><p>If we're interested, we send a formal offer. You choose Full or Partnership and we negotiate terms.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div><h4>Agreement &amp; Transfer</h4><p>We draft a written agreement. Once signed, ownership transfers and funding begins immediately.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div><h4>Launch Under Strict Studio</h4><p>The game continues under our brand. Marketing, updates, and growth begin right away.</p></div></div>
+    </div>
+    <div style="text-align:center;margin-top:3.5rem">
+      <a href="https://discord.gg/BkGQ8ATpkb" target="_blank" class="btn-primary" style="font-size:.85rem;padding:16px 44px">START YOUR APPLICATION</a>
+    </div>
+  </div>
+
+  <footer><p>© 2025 <span>Strict Studio</span> · All Rights Reserved · Built on Roblox</p></footer>
+</div>
+
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   ██████╗  █████╗ ████████╗ █████╗     ████████╗ █████╗ ██████╗ ██╗     ███████╗
+   ██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗    ╚══██╔══╝██╔══██╗██╔══██╗██║     ██╔════╝
+   ██║  ██║███████║   ██║   ███████║       ██║   ███████║██████╔╝██║     █████╗
+   ██║  ██║██╔══██║   ██║   ██╔══██║       ██║   ██╔══██║██╔══██╗██║     ██╔══╝
+   ██████╔╝██║  ██║   ██║   ██║  ██║       ██║   ██║  ██║██████╔╝███████╗███████╗
+   ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝       ╚═╝   ╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝
+
+   EDIT YOUR GAMES AND STAFF BELOW — the website builds itself from these lists.
+════════════════════════════════════════════════════════════════════ */
+
+
+/* ──────────────────────────────────────────────
+   GAMES TABLE
+   Fields:
+     icon       – any emoji
+     name       – game display name
+     desc       – short description
+     status     – "active" | "beta" | "coming"
+     placeId    – your Roblox Place ID (for play button link)
+     universeId – your Roblox Universe ID (for live CCU/visits via proxy)
+   ────────────────────────────────────────────── */
+const GAMES = [
+    {
+    icon:       '💪',
+    name:       'Bridge To Admin Powers!',
+    desc:       'Smash buildings, shatter structures, and turn the world into rubble as you grow stronger with every explosion!',
+    status:     'active',
+    placeId:    '113345103306610',        // e.g. '920587237'
+    universeId: '7574841866',        // e.g. '1234567890'
+  },
+  {
+    icon:       '💥',
+    name:       'Demolition Madness!',
+    desc:       'Smash buildings, shatter structures, and turn the world into rubble as you grow stronger with every explosion!',
+    status:     'active',
+    placeId:    '101961668171333',        // e.g. '920587237'
+    universeId: '8232695287',        // e.g. '1234567890'
+  },
+  {
+    icon:       '⚔️',
+    name:       'Cartoon Wars!',
+    desc:       'Continuous cartoony PvP! Think looney tunes but in a roblox game.',
+    status:     'beta',
+    placeId:    '110893836115263',
+    universeId: '9911889637',
+  },
+  {
+    icon:       '🚀',
+    name:       'The space game..',
+    desc:       'Something massive is in development. Join our Discord for early access.',
+    status:     'coming',
+    placeId:    '',
+    universeId: '',
+  },
+];
+
+
+/* ──────────────────────────────────────────────
+   STAFF TABLE
+   Fields:
+     name  – Roblox username
+     role  – their job title
+     tier  – "ceo" | "lead" | "dev" | "manager" | "tester"
+     since – year they joined (optional, e.g. '2024')
+   ────────────────────────────────────────────── */
+const STAFF = [
+  { name: '@cazie12', role: 'CEO & Founder',      tier: 'ceo',     since: '2025', imageUrl: 'https://cdn.discordapp.com/avatars/1221489596920107098/4a98c99e3587e278d3da217cd34d7abe.webp?size=64' },
+  { name: '@violent',  role: 'Lead Developer | Demolition Madness',     tier: 'lead',    since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/1372898921235484708/a_15642742e1e607272eca4507e8cbe84c.webp?size=64' },
+  { name: '@hyperion',  role: 'Lead Developer | Cartoon Wars',     tier: 'lead',    since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/433855200504184842/fae9aab2958bf83f287f10fce4240d66.webp?size=64' },
+  { name: '@Asterion',role: 'UI Designer',          tier: 'dev',     since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/1237730249924542557/95506af48c669421fcfb78377415c037.webp?size=64' },
+  { name: '@Velocity70',role: 'Sound Designer',          tier: 'dev',     since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/1472984231667040286/85169af28c144033dba517235ed18f3e.webp?size=64' },
+  { name: '@yup',role: 'Animator',          tier: 'dev',     since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/1296548174609125399/a80f24613591d3dab1f808f822d8d565.webp?size=64' },
+  { name: '@sashkataone',role: 'VFX Artist',          tier: 'dev',     since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/1043920799112888373/01e060e209263e06041d29ba9fe795c3.webp?size=64' },
+  { name: '@Jayvis',  role: 'Director Of Discord',  tier: 'manager', since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/1454575554022871154/1fc460447013663d31e39ac564749508.webp?size=64' },
+  { name: '@dustt',   role: 'QA Lead',          tier: 'tester',  since: '2025', imageUrl: 'https://cdn.discordapp.com/avatars/873727197637115965/6cb73328098c7630d38189f8fb5cdf3a.webp?size=64' },
+  { name: '@mimi',   role: 'QA Tester',          tier: 'tester',  since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/811367739695693847/50c617a8bf11b02248e0e34b7f4d18ab.webp?size=64' },
+];
+
+
+/* ══════════════════════════════════════════════════════════════
+   LIVE STATS — set this to your Cloudflare Worker / proxy URL
+   to enable live CCU & visit counts. Leave blank to skip.
+   (Ask Claude to generate the Cloudflare Worker proxy code.)
+══════════════════════════════════════════════════════════════ */
+const PROXY_BASE = 'https://scrictstudio.loganfrench59.workers.dev/';  // e.g. 'https://my-worker.workers.dev/roblox'
+
+
+/* ════════════════════════════════════════════════════════════
+   ↓↓  RENDERING ENGINE — no need to edit below this line  ↓↓
+════════════════════════════════════════════════════════════ */
+
+// ── BADGE CONFIG ──
+const BADGE = {
+  active:  { label:'Active',      cls:'badge-active' },
+  beta:    { label:'Beta',        cls:'badge-beta'   },
+  coming:  { label:'Coming Soon', cls:'badge-coming' },
+};
+
+const TIER_META = {
+  ceo:     { label:'👑 Chief Executive Officer', cardCls:'ceo',     avCls:'av-ceo'     },
+  lead:    { label:'⚡ Lead Developers',          cardCls:'lead',    avCls:'av-lead'    },
+  dev:     { label:'🛠️ Developers',              cardCls:'dev',     avCls:'av-dev'     },
+  manager: { label:'🎯 Managers',                 cardCls:'manager', avCls:'av-manager' },
+  tester:  { label:'🔬 Testers',                 cardCls:'tester',  avCls:'av-tester'  },
+};
+
+const TIER_ORDER = ['ceo','lead','dev','manager','tester'];
+
+function initials(name) {
+  return name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+}
+
+function fmtNum(n) {
+  if (!n || isNaN(n)) return '—';
+  if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
+  if (n >= 1e3) return (n/1e3).toFixed(1)+'K';
+  return String(n);
+}
+
+// ── BUILD GAME CARDS ──
+function buildGames() {
+  const grid = document.getElementById('games-grid');
+  grid.innerHTML = '';
+  GAMES.forEach(g => {
+    const badge = BADGE[g.status] || BADGE.active;
+    const isComing = g.status === 'coming';
+    const playHref = g.placeId ? `https://www.roblox.com/games/${g.placeId}` : '#';
+
+    const card = document.createElement('div');
+    card.className = 'game-card reveal';
+    card.dataset.universeId = g.universeId || '';
+    card.innerHTML = `
+      <div class="game-thumb">${g.icon}</div>
+      <div class="game-info">
+        <span class="game-badge ${badge.cls}">${badge.label}</span>
+        <h3>${g.name}</h3>
+        <p class="game-desc">${g.desc}</p>
+        <div class="game-stats">
+          <div class="stat-item">
+            <span class="stat-label">Live CCU</span>
+            <span class="stat-value ${isComing?'':'loading'}" data-stat="ccu">${isComing?'—':'...'}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Visits</span>
+            <span class="stat-value ${isComing?'':'loading'}" data-stat="visits">${isComing?'—':'...'}</span>
+          </div>
+        </div>
+        ${isComing
+          ? `<span class="play-btn soon">⏳ COMING SOON</span>`
+          : `<a href="${playHref}" target="_blank" class="play-btn">▶ PLAY NOW</a>`
+        }
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ── BUILD STAFF CARDS ──
+function buildStaff() {
+  const container = document.getElementById('staff-container');
+  container.innerHTML = '';
+
+  TIER_ORDER.forEach(tierKey => {
+    const members = STAFF.filter(s => s.tier === tierKey);
+    if (!members.length) return;
+    const meta = TIER_META[tierKey];
+
+    const tierDiv = document.createElement('div');
+    tierDiv.className = 'staff-tier reveal';
+    tierDiv.innerHTML = `<div class="tier-label tier-${tierKey}">${meta.label}</div><div class="staff-grid"></div>`;
+    const staffGrid = tierDiv.querySelector('.staff-grid');
+
+    members.forEach(m => {
+      const card = document.createElement('div');
+      card.className = `staff-card ${meta.cardCls}`;
+      card.innerHTML = `
+        <div class="staff-avatar ${meta.avCls}">
+        <img src="${m.imageUrl}" alt="${m.name}" />
+        </div>
+        <div>
+          <div class="staff-name">${m.name}</div>
+          <div class="staff-role">${m.role}</div>
+        </div>`;
+      staffGrid.appendChild(card);
+    });
+    container.appendChild(tierDiv);
+  });
+}
+
+// ── LIVE STATS ──
+async function loadStats() {
+  if (!PROXY_BASE) return;
+  document.querySelectorAll('.game-card[data-universe-id]').forEach(async card => {
+    const uid = card.dataset.universeId;
+    if (!uid) return;
+    try {
+      const res  = await fetch(`${PROXY_BASE}?universeId=${uid}`);
+      const data = await res.json();
+      const g    = data?.data?.[0];
+      if (!g) return;
+      const ccuEl = card.querySelector('[data-stat="ccu"]');
+      const visEl = card.querySelector('[data-stat="visits"]');
+      if (ccuEl) { ccuEl.textContent = fmtNum(g.playing); ccuEl.classList.remove('loading'); }
+      if (visEl) { visEl.textContent = fmtNum(g.visits);  visEl.classList.remove('loading'); }
+    } catch {}
+  });
+}
+
+// ── SCROLL REVEAL ──
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.07 });
+
+function triggerReveal() {
+  document.querySelectorAll('.page.active .reveal').forEach(el => {
+    el.classList.remove('visible');
+    revealObs.observe(el);
+  });
+}
+
+// ── PAGE NAV ──
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active-nav'));
+  const btn = document.getElementById('nav-' + (name === 'acquisitions' ? 'acq' : name));
+  if (btn) btn.classList.add('active-nav');
+  window.scrollTo({ top:0 });
+  setTimeout(triggerReveal, 60);
+}
+
+function scrollAfter(id) {
+  setTimeout(() => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior:'smooth' }); }, 120);
+}
+
+// ── INIT ──
+buildGames();
+buildStaff();
+loadStats();
+triggerReveal();
+</script>
+</body>
+</html>
