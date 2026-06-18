@@ -22,11 +22,7 @@
     background-image:linear-gradient(rgba(41,121,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(41,121,255,.04) 1px,transparent 1px);
     background-size:60px 60px;pointer-events:none;z-index:0;
   }
-
-  /* PAGE SYSTEM */
   .page{display:none;} .page.active{display:block;}
-
-  /* NAV */
   nav{
     position:fixed;top:0;left:0;right:0;z-index:100;
     display:flex;align-items:center;justify-content:space-between;
@@ -67,8 +63,6 @@
   .discord-btn::after{display:none !important;}
   .discord-btn:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(88,101,242,.5);}
   .discord-icon{width:16px;height:16px;fill:white;}
-
-  /* SHARED */
   .page-wrap{position:relative;z-index:1;padding-top:70px;}
   .section{max-width:1280px;margin:0 auto;padding:5rem 2rem;}
   .section-header{text-align:center;margin-bottom:3.5rem;}
@@ -79,8 +73,6 @@
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;
   }
   .section-line{width:80px;height:3px;background:linear-gradient(90deg,var(--cyan),var(--purple));margin:1.2rem auto 0;border-radius:2px;}
-
-  /* HERO */
   #hero-section{
     position:relative;min-height:100vh;display:flex;flex-direction:column;
     align-items:center;justify-content:center;text-align:center;
@@ -118,8 +110,6 @@
     letter-spacing:2px;text-decoration:none;cursor:pointer;transition:all .2s;
   }
   .btn-outline:hover{background:rgba(0,229,255,.1);box-shadow:0 0 30px rgba(0,229,255,.2);}
-
-  /* GAME CARDS */
   .games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.8rem;}
   .game-card{
     background:var(--card-bg);border:1px solid var(--border);border-radius:12px;
@@ -152,8 +142,6 @@
   }
   .play-btn:hover{box-shadow:0 6px 30px rgba(41,121,255,.5);transform:translateY(-1px);}
   .play-btn.soon{background:linear-gradient(135deg,#1e2d50,#2a1a4a);color:#44557a;cursor:not-allowed;pointer-events:none;}
-
-  /* STAFF CARDS */
   .staff-tier{margin-bottom:3rem;}
   .tier-label{
     font-family:'Orbitron',monospace;font-size:.72rem;font-weight:700;letter-spacing:3px;
@@ -178,28 +166,25 @@
   .staff-card.manager{border-color:rgba(124,58,237,.2);}
   .staff-card.tester{border-color:rgba(68,85,122,.2);}
   .staff-avatar{
-    width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    width:44px;height:44px;border-radius:50%;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
     font-family:'Orbitron',monospace;font-weight:900;font-size:.9rem;color:#fff;flex-shrink:0;
   }
-  .av-ceo{background:linear-gradient(135deg,#b8860b,#ffd700);}
-  .av-lead{background:linear-gradient(135deg,#006080,var(--cyan));}
-  .av-dev{background:linear-gradient(135deg,var(--blue),#1a3a8a);}
-  .av-manager{background:linear-gradient(135deg,var(--purple),#3d1a7a);}
-  .av-tester{background:linear-gradient(135deg,#1e2d50,#334466);}
+  .staff-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+  .staff-avatar.av-ceo{background:linear-gradient(135deg,#b8860b,#ffd700);}
+  .staff-avatar.av-lead{background:linear-gradient(135deg,#006080,var(--cyan));}
+  .staff-avatar.av-dev{background:linear-gradient(135deg,var(--blue),#1a3a8a);}
+  .staff-avatar.av-manager{background:linear-gradient(135deg,var(--purple),#3d1a7a);}
+  .staff-avatar.av-tester{background:linear-gradient(135deg,#1e2d50,#334466);}
   .staff-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;color:#ccdaff;letter-spacing:.5px;}
   .staff-role{font-size:.7rem;color:#44557a;letter-spacing:1px;text-transform:uppercase;}
-
-  /* DISCORD BANNER */
   .discord-cta{
     background:linear-gradient(135deg,rgba(88,101,242,.15),rgba(124,58,237,.1));
     border:1px solid rgba(88,101,242,.3);border-radius:16px;padding:3rem;
     display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;
     position:relative;overflow:hidden;
   }
-  .discord-cta::before{
-    content:'';position:absolute;right:-60px;top:-60px;width:240px;height:240px;
-    background:radial-gradient(circle,rgba(88,101,242,.2),transparent 70%);border-radius:50%;
-  }
+  .discord-cta::before{content:'';position:absolute;right:-60px;top:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(88,101,242,.2),transparent 70%);border-radius:50%;}
   .discord-text h3{font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:.5rem;letter-spacing:1px;}
   .discord-text p{color:#6677aa;font-size:1rem;}
   .discord-big-btn{
@@ -211,37 +196,20 @@
   }
   .discord-big-btn svg{width:22px;height:22px;fill:white;}
   .discord-big-btn:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(88,101,242,.55);}
-
-  /* ACQUISITIONS */
   .acq-hero-wrap{
     text-align:center;padding:5rem 2rem 3rem;
     background:linear-gradient(180deg,rgba(41,121,255,.06) 0%,transparent 100%);
     border-bottom:1px solid var(--border);position:relative;overflow:hidden;
   }
-  .acq-hero-wrap::before{
-    content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);
-    width:600px;height:300px;background:radial-gradient(ellipse,rgba(124,58,237,.15),transparent 70%);pointer-events:none;
-  }
+  .acq-hero-wrap::before{content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(124,58,237,.15),transparent 70%);pointer-events:none;}
   .acq-hero-wrap p{max-width:680px;margin:1rem auto 0;font-size:1.1rem;color:#6677aa;line-height:1.8;}
-  .acq-title{
-    font-family:'Orbitron',monospace;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;
-    background:linear-gradient(135deg,var(--cyan),var(--blue),var(--purple));
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;margin-bottom:1rem;
-  }
+  .acq-title{font-family:'Orbitron',monospace;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;margin-bottom:1rem;}
   .plans-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:1100px;margin:0 auto;}
   @media(max-width:750px){.plans-grid{grid-template-columns:1fr;}}
-  .plan-card{
-    background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:2.5rem;
-    position:relative;overflow:hidden;transition:transform .3s,border-color .3s,box-shadow .3s;
-  }
+  .plan-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:2.5rem;position:relative;overflow:hidden;transition:transform .3s,border-color .3s,box-shadow .3s;}
   .plan-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 40px rgba(41,121,255,.1);}
   .plan-card.featured{border-color:rgba(0,229,255,.35);}
-  .plan-card.featured::before{
-    content:'MOST POPULAR';position:absolute;top:1.2rem;right:-2.5rem;
-    background:linear-gradient(135deg,var(--cyan),var(--blue));color:#000;
-    font-family:'Orbitron',monospace;font-size:.55rem;font-weight:900;letter-spacing:2px;
-    padding:5px 3.5rem;transform:rotate(35deg);
-  }
+  .plan-card.featured::before{content:'MOST POPULAR';position:absolute;top:1.2rem;right:-2.5rem;background:linear-gradient(135deg,var(--cyan),var(--blue));color:#000;font-family:'Orbitron',monospace;font-size:.55rem;font-weight:900;letter-spacing:2px;padding:5px 3.5rem;transform:rotate(35deg);}
   .plan-icon{width:60px;height:60px;border-radius:12px;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:center;font-size:1.8rem;}
   .plan-icon.full{background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(41,121,255,.2));}
   .plan-icon.partner{background:linear-gradient(135deg,rgba(0,229,255,.2),rgba(124,58,237,.2));}
@@ -252,11 +220,7 @@
   .plan-perks li{display:flex;align-items:flex-start;gap:10px;font-size:.93rem;color:#c0d0ee;}
   .plan-perks li::before{content:'✓';color:var(--cyan);font-weight:700;font-family:'Orbitron',monospace;font-size:.8rem;margin-top:2px;flex-shrink:0;}
   .plan-perks li.con::before{content:'✗';color:#ff4466;}
-  .plan-cta{
-    display:block;width:100%;padding:13px;text-align:center;border-radius:8px;
-    font-family:'Orbitron',monospace;font-size:.75rem;font-weight:700;letter-spacing:2px;
-    text-decoration:none;cursor:pointer;transition:all .2s;
-  }
+  .plan-cta{display:block;width:100%;padding:13px;text-align:center;border-radius:8px;font-family:'Orbitron',monospace;font-size:.75rem;font-weight:700;letter-spacing:2px;text-decoration:none;cursor:pointer;transition:all .2s;}
   .full-cta{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border:none;box-shadow:0 0 30px rgba(41,121,255,.25);}
   .full-cta:hover{box-shadow:0 0 50px rgba(41,121,255,.5);transform:translateY(-2px);}
   .partner-cta{background:transparent;border:1.5px solid var(--cyan);color:var(--cyan);}
@@ -277,12 +241,8 @@
   .step-num{width:40px;height:40px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:900;font-size:.85rem;color:#fff;}
   .step h4{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.05rem;color:#ddeeff;margin-bottom:.3rem;}
   .step p{font-size:.9rem;color:#6677aa;line-height:1.6;}
-
-  /* FOOTER */
   footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);color:#2a3a5a;font-size:.82rem;letter-spacing:1px;}
   footer span{background:linear-gradient(90deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;}
-
-  /* REVEAL */
   .reveal{opacity:0;transform:translateY(25px);transition:opacity .65s ease,transform .65s ease;}
   .reveal.visible{opacity:1;transform:translateY(0);}
   ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--dark);}
@@ -291,7 +251,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <a class="nav-logo" href="#" onclick="showPage('home');return false;">
     <img src="ss.png" alt="Strict Studio">
@@ -311,12 +270,7 @@
   </ul>
 </nav>
 
-
-<!-- ════════════════════════════════════════════
-                    HOME PAGE
-════════════════════════════════════════════ -->
 <div id="page-home" class="page active page-wrap">
-
   <div id="hero-section">
     <div class="hero-glow"></div>
     <img src="ss.png" alt="Strict Studio" class="hero-logo">
@@ -364,19 +318,13 @@
   <footer><p>© 2025 <span>Strict Studio</span> · All Rights Reserved · Built on Roblox</p></footer>
 </div>
 
-
-<!-- ════════════════════════════════════════════
-               ACQUISITIONS PAGE
-════════════════════════════════════════════ -->
 <div id="page-acquisitions" class="page page-wrap">
-
   <div class="acq-hero-wrap reveal">
     <span class="section-label">// Strict Studio · Business Development</span>
     <h2 class="acq-title">GAME ACQUISITIONS</h2>
     <div class="section-line" style="margin:0 auto 1.5rem"></div>
     <p>We acquire quality Roblox games and invest in their future. Whether you want a clean exit or want to stay on as lead developer — we have a deal structure built for you.</p>
   </div>
-
   <div class="section reveal" style="padding-top:3rem">
     <div class="section-header">
       <span class="section-label">// Choose Your Path</span>
@@ -416,7 +364,6 @@
       </div>
     </div>
   </div>
-
   <div class="section reveal" style="padding-top:0">
     <div class="section-header" style="margin-bottom:2rem">
       <span class="section-label">// Side by Side</span>
@@ -441,7 +388,6 @@
       </table>
     </div>
   </div>
-
   <div class="section reveal" style="padding-top:0">
     <div class="section-header" style="margin-bottom:2rem">
       <span class="section-label">// What Happens Next</span>
@@ -459,106 +405,81 @@
       <a href="https://discord.gg/BkGQ8ATpkb" target="_blank" class="btn-primary" style="font-size:.85rem;padding:16px 44px">START YOUR APPLICATION</a>
     </div>
   </div>
-
   <footer><p>© 2025 <span>Strict Studio</span> · All Rights Reserved · Built on Roblox</p></footer>
 </div>
 
-
 <script>
 /* ════════════════════════════════════════════════════════════════════
-   ██████╗  █████╗ ████████╗ █████╗     ████████╗ █████╗ ██████╗ ██╗     ███████╗
-   ██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗    ╚══██╔══╝██╔══██╗██╔══██╗██║     ██╔════╝
-   ██║  ██║███████║   ██║   ███████║       ██║   ███████║██████╔╝██║     █████╗
-   ██║  ██║██╔══██║   ██║   ██╔══██║       ██║   ██╔══██║██╔══██╗██║     ██╔══╝
-   ██████╔╝██║  ██║   ██║   ██║  ██║       ██║   ██║  ██║██████╔╝███████╗███████╗
-   ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝       ╚═╝   ╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝
-
-   EDIT YOUR GAMES AND STAFF BELOW — the website builds itself from these lists.
+   EDIT YOUR GAMES AND STAFF BELOW — the website builds itself.
 ════════════════════════════════════════════════════════════════════ */
 
-
-/* ──────────────────────────────────────────────
-   GAMES TABLE
-   Fields:
-     icon       – any emoji
-     name       – game display name
-     desc       – short description
-     status     – "active" | "beta" | "coming"
-     placeId    – your Roblox Place ID (for play button link)
-     universeId – your Roblox Universe ID (for live CCU/visits via proxy)
-   ────────────────────────────────────────────── */
 const GAMES = [
-    {
-    icon:       '💪',
-    name:       'Bridge To Admin Powers!',
-    desc:       'Smash buildings, shatter structures, and turn the world into rubble as you grow stronger with every explosion!',
-    status:     'active',
-    placeId:    '113345103306610',        // e.g. '920587237'
-    universeId: '7574841866',        // e.g. '1234567890'
+  {
+    icon: '💪', name: 'Bridge To Admin Powers!',
+    desc: 'Smash buildings, shatter structures, and turn the world into rubble as you grow stronger with every explosion!',
+    status: 'active', placeId: '113345103306610', universeId: '7574841866',
   },
   {
-    icon:       '💥',
-    name:       'Demolition Madness!',
-    desc:       'Smash buildings, shatter structures, and turn the world into rubble as you grow stronger with every explosion!',
-    status:     'active',
-    placeId:    '101961668171333',        // e.g. '920587237'
-    universeId: '8232695287',        // e.g. '1234567890'
+    icon: '💥', name: 'Demolition Madness!',
+    desc: 'Smash buildings, shatter structures, and turn the world into rubble as you grow stronger with every explosion!',
+    status: 'active', placeId: '101961668171333', universeId: '8232695287',
   },
   {
-    icon:       '⚔️',
-    name:       'Cartoon Wars!',
-    desc:       'Continuous cartoony PvP! Think looney tunes but in a roblox game.',
-    status:     'beta',
-    placeId:    '110893836115263',
-    universeId: '9911889637',
+    icon: '⚔️', name: 'Cartoon Wars!',
+    desc: 'Continuous cartoony PvP! Think looney tunes but in a roblox game.',
+    status: 'beta', placeId: '110893836115263', universeId: '9911889637',
   },
   {
-    icon:       '🚀',
-    name:       'The space game..',
-    desc:       'Something massive is in development. Join our Discord for early access.',
-    status:     'coming',
-    placeId:    '',
-    universeId: '',
+    icon: '🚀', name: 'The space game..',
+    desc: 'Something massive is in development. Join our Discord for early access.',
+    status: 'coming', placeId: '', universeId: '',
   },
 ];
-
 
 /* ──────────────────────────────────────────────
    STAFF TABLE
    Fields:
-     name  – Roblox username
-     role  – their job title
-     tier  – "ceo" | "lead" | "dev" | "manager" | "tester"
-     since – year they joined (optional, e.g. '2024')
+     name      – display name
+     role      – job title
+     tier      – "ceo" | "lead" | "dev" | "manager" | "tester"
+     since     – year joined
+     discordId – their Discord user ID (18-digit number)
+                 Right-click their name in Discord → Copy User ID
+                 (Enable Developer Mode in Discord settings first:
+                  Settings → Advanced → Developer Mode → ON)
    ────────────────────────────────────────────── */
 const STAFF = [
-  { name: '@cazie12', role: 'CEO & Founder',      tier: 'ceo',     since: '2025', imageUrl: 'https://cdn.discordapp.com/avatars/1221489596920107098/4a98c99e3587e278d3da217cd34d7abe.webp?size=64' },
-  { name: '@violent',  role: 'Lead Developer | Demolition Madness',     tier: 'lead',    since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/1372898921235484708/a_15642742e1e607272eca4507e8cbe84c.webp?size=64' },
-  { name: '@hyperion',  role: 'Lead Developer | Cartoon Wars',     tier: 'lead',    since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/433855200504184842/fae9aab2958bf83f287f10fce4240d66.webp?size=64' },
-  { name: '@Asterion',role: 'UI Designer',          tier: 'dev',     since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/1237730249924542557/95506af48c669421fcfb78377415c037.webp?size=64' },
-  { name: '@Velocity70',role: 'Sound Designer',          tier: 'dev',     since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/1472984231667040286/85169af28c144033dba517235ed18f3e.webp?size=64' },
-  { name: '@yup',role: 'Animator',          tier: 'dev',     since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/1296548174609125399/a80f24613591d3dab1f808f822d8d565.webp?size=64' },
-  { name: '@sashkataone',role: 'VFX Artist',          tier: 'dev',     since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/1043920799112888373/01e060e209263e06041d29ba9fe795c3.webp?size=64' },
-  { name: '@Jayvis',  role: 'Director Of Discord',  tier: 'manager', since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/1454575554022871154/1fc460447013663d31e39ac564749508.webp?size=64' },
-  { name: '@toy',  role: 'Director Of Discord',  tier: 'manager', since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/991909987486011392/41f18f204a51e6b854136dadb0d3946e.webp?size=64' },
-  { name: '@dustt',   role: 'QA Lead',          tier: 'tester',  since: '2025', imageUrl: 'https://cdn.discordapp.com/avatars/873727197637115965/6cb73328098c7630d38189f8fb5cdf3a.webp?size=64' },
-  { name: '@mimi',   role: 'QA Tester',          tier: 'tester',  since: '2026', imageUrl: 'https://cdn.discordapp.com/avatars/811367739695693847/50c617a8bf11b02248e0e34b7f4d18ab.webp?size=64' },
+  { name: '@cazie12',     role: 'CEO & Founder',                    tier: 'ceo',     since: '2025', discordId: '1221489596920107098' },
+  { name: '@violent',     role: 'Lead Developer | Demolition Madness', tier: 'lead',  since: '2026', discordId: '1372898921235484708' },
+  { name: '@hyperion',    role: 'Lead Developer | Cartoon Wars',    tier: 'lead',    since: '2026', discordId: '433855200504184842'  },
+  { name: '@Asterion',    role: 'UI Designer',                      tier: 'dev',     since: '2026', discordId: '1237730249924542557' },
+  { name: '@Velocity70',  role: 'Sound Designer',                   tier: 'dev',     since: '2026', discordId: '1472984231667040286' },
+  { name: '@yup',         role: 'Animator',                         tier: 'dev',     since: '2026', discordId: '1296548174609125399' },
+  { name: '@sashkataone', role: 'VFX Artist',                       tier: 'dev',     since: '2026', discordId: '1043920799112888373' },
+  { name: '@Jayvis',      role: 'Director Of Discord',              tier: 'manager', since: '2026', discordId: '1454575554022871154' },
+  { name: '@toy',         role: 'Director Of Discord',              tier: 'manager', since: '2026', discordId: '991909987486011392'  },
+  { name: '@dustt',       role: 'QA Lead',                          tier: 'tester',  since: '2025', discordId: '873727197637115965'  },
+  { name: '@mimi',        role: 'QA Tester',                        tier: 'tester',  since: '2026', discordId: '811367739695693847'  },
 ];
 
+/* ══════════════════════════════════════════════════════════════
+   Your Cloudflare Worker proxy URL for live Roblox stats.
+══════════════════════════════════════════════════════════════ */
+const PROXY_BASE = 'https://scrictstudio.loganfrench59.workers.dev/';
 
 /* ══════════════════════════════════════════════════════════════
-   LIVE STATS — set this to your Cloudflare Worker / proxy URL
-   to enable live CCU & visit counts. Leave blank to skip.
-   (Ask Claude to generate the Cloudflare Worker proxy code.)
+   Your Cloudflare Worker proxy URL for Discord avatars.
+   This must be a SEPARATE worker from the Roblox one.
+   Ask Claude to generate this worker code if you need it.
+   Format: https://your-discord-proxy.workers.dev/?userId=ID
+   Leave blank to fall back to gradient initials avatars.
 ══════════════════════════════════════════════════════════════ */
-const PROXY_BASE = 'https://scrictstudio.loganfrench59.workers.dev/';  // e.g. 'https://my-worker.workers.dev/roblox'
-
+const DISCORD_PROXY = 'https://scrictstudio.loganfrench59.workers.dev/discord';
 
 /* ════════════════════════════════════════════════════════════
    ↓↓  RENDERING ENGINE — no need to edit below this line  ↓↓
 ════════════════════════════════════════════════════════════ */
 
-// ── BADGE CONFIG ──
 const BADGE = {
   active:  { label:'Active',      cls:'badge-active' },
   beta:    { label:'Beta',        cls:'badge-beta'   },
@@ -576,7 +497,7 @@ const TIER_META = {
 const TIER_ORDER = ['ceo','lead','dev','manager','tester'];
 
 function initials(name) {
-  return name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+  return name.replace('@','').slice(0,2).toUpperCase();
 }
 
 function fmtNum(n) {
@@ -594,7 +515,6 @@ function buildGames() {
     const badge = BADGE[g.status] || BADGE.active;
     const isComing = g.status === 'coming';
     const playHref = g.placeId ? `https://www.roblox.com/games/${g.placeId}` : '#';
-
     const card = document.createElement('div');
     card.className = 'game-card reveal';
     card.dataset.universeId = g.universeId || '';
@@ -627,23 +547,21 @@ function buildGames() {
 function buildStaff() {
   const container = document.getElementById('staff-container');
   container.innerHTML = '';
-
   TIER_ORDER.forEach(tierKey => {
     const members = STAFF.filter(s => s.tier === tierKey);
     if (!members.length) return;
     const meta = TIER_META[tierKey];
-
     const tierDiv = document.createElement('div');
     tierDiv.className = 'staff-tier reveal';
     tierDiv.innerHTML = `<div class="tier-label tier-${tierKey}">${meta.label}</div><div class="staff-grid"></div>`;
     const staffGrid = tierDiv.querySelector('.staff-grid');
-
     members.forEach(m => {
       const card = document.createElement('div');
       card.className = `staff-card ${meta.cardCls}`;
+      // Start with gradient + initials, swap in real avatar when loaded
       card.innerHTML = `
-        <div class="staff-avatar ${meta.avCls}">
-        <img src="${m.imageUrl}" alt="${m.name}" />
+        <div class="staff-avatar ${meta.avCls}" id="av-${m.discordId}">
+          ${initials(m.name)}
         </div>
         <div>
           <div class="staff-name">${m.name}</div>
@@ -653,9 +571,39 @@ function buildStaff() {
     });
     container.appendChild(tierDiv);
   });
+
+  // Load real avatars after cards are in DOM
+  loadDiscordAvatars();
 }
 
-// ── LIVE STATS ──
+// ── DISCORD AVATARS ──
+// Uses the Discord CDN directly via avatar hash from the proxy.
+// Falls back to gradient initials if anything fails.
+async function loadDiscordAvatars() {
+  if (!DISCORD_PROXY) return;
+  for (const m of STAFF) {
+    if (!m.discordId) continue;
+    const el = document.getElementById(`av-${m.discordId}`);
+    if (!el) continue;
+    try {
+      const res  = await fetch(`${DISCORD_PROXY}?userId=${m.discordId}`);
+      const data = await res.json();
+      // Proxy should return { avatar_url: "https://cdn.discordapp.com/..." }
+      if (data.avatar_url) {
+        const img = document.createElement('img');
+        img.src = data.avatar_url;
+        img.alt = m.name;
+        img.onerror = () => img.remove(); // keep initials if img fails
+        el.innerHTML = '';
+        el.appendChild(img);
+      }
+    } catch {
+      // Keep gradient initials on any error
+    }
+  }
+}
+
+// ── LIVE ROBLOX STATS ──
 async function loadStats() {
   if (!PROXY_BASE) return;
   document.querySelectorAll('.game-card[data-universe-id]').forEach(async card => {
@@ -686,7 +634,6 @@ function triggerReveal() {
   });
 }
 
-// ── PAGE NAV ──
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
@@ -701,7 +648,6 @@ function scrollAfter(id) {
   setTimeout(() => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior:'smooth' }); }, 120);
 }
 
-// ── INIT ──
 buildGames();
 buildStaff();
 loadStats();
