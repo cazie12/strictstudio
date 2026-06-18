@@ -474,7 +474,7 @@ const PROXY_BASE = 'https://scrictstudio.loganfrench59.workers.dev/';
    Format: https://your-discord-proxy.workers.dev/?userId=ID
    Leave blank to fall back to gradient initials avatars.
 ══════════════════════════════════════════════════════════════ */
-const DISCORD_PROXY = 'https://soft-darkness-8edb.loganfrench59.workers.dev';
+const DISCORD_PROXY = 'https://scrictstudio.loganfrench59.workers.dev/discord';
 
 /* ════════════════════════════════════════════════════════════
    ↓↓  RENDERING ENGINE — no need to edit below this line  ↓↓
@@ -590,12 +590,16 @@ async function loadDiscordAvatars() {
       const data = await res.json();
       // Proxy should return { avatar_url: "https://cdn.discordapp.com/..." }
       if (data.avatar_url) {
-        const img = document.createElement('img');
-        img.src = data.avatar_url;
+        const img = new Image();
         img.alt = m.name;
-        img.onerror = () => img.remove(); // keep initials if img fails
-        el.innerHTML = '';
-        el.appendChild(img);
+        img.onload = () => {
+          el.innerHTML = '';
+          el.appendChild(img);
+        };
+        img.onerror = () => {
+          // Keep gradient initials if image genuinely fails to load
+        };
+        img.src = data.avatar_url;
       }
     } catch {
       // Keep gradient initials on any error
