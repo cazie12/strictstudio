@@ -474,7 +474,7 @@ const PROXY_BASE = 'https://scrictstudio.loganfrench59.workers.dev/';
    Format: https://your-discord-proxy.workers.dev/?userId=ID
    Leave blank to fall back to gradient initials avatars.
 ══════════════════════════════════════════════════════════════ */
-const DISCORD_PROXY = 'https://soft-darkness-8edb.loganfrench59.workers.dev';
+const DISCORD_PROXY = 'https://scrictstudio.loganfrench59.workers.dev/discord';
 
 /* ════════════════════════════════════════════════════════════
    ↓↓  RENDERING ENGINE — no need to edit below this line  ↓↓
@@ -505,6 +505,32 @@ function fmtNum(n) {
   if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
   if (n >= 1e3) return (n/1e3).toFixed(1)+'K';
   return String(n);
+}
+
+// Detects if an image is solid white / blank by sampling pixels via canvas.
+// Some Discord avatar files render as pure white due to a CDN-side bug
+// with certain APNG uploads — this catches that case so we can fall back
+// to the gradient + initials avatar instead of showing a blank circle.
+function isBlankImage(img) {
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = 16;
+    canvas.height = 16;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, 16, 16);
+    const { data } = ctx.getImageData(0, 0, 16, 16);
+    let whiteCount = 0;
+    const totalPixels = data.length / 4;
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i], g = data[i+1], b = data[i+2], a = data[i+3];
+      if (a > 200 && r > 245 && g > 245 && b > 245) whiteCount++;
+    }
+    // If 95%+ of sampled pixels are near-white, treat as blank
+    return (whiteCount / totalPixels) > 0.95;
+  } catch (e) {
+    // If canvas read fails (e.g. CORS taint), assume image is fine
+    return false;
+  }
 }
 
 // ── BUILD GAME CARDS ──
@@ -592,7 +618,11 @@ async function loadDiscordAvatars() {
       if (data.avatar_url) {
         const img = new Image();
         img.alt = m.name;
+        img.crossOrigin = 'anonymous';
         img.onload = () => {
+          if (isBlankImage(img)) {
+            return; // keep gradient initials — image is corrupted/blank on Discord's end
+          }
           el.innerHTML = '';
           el.appendChild(img);
         };
